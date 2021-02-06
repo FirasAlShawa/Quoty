@@ -31,15 +31,13 @@ class QuoteViewModel(
 
     val quotesLiveData : MutableLiveData<List<QuoteResponse>> = MutableLiveData()
 
+    val likedQuotesLiveData : MutableLiveData<List<QuoteResponse>> = MutableLiveData()
+
     fun getRandomQuote() = viewModelScope.launch {
         safeSingleQuote()
     }
 
-    fun deleteQuoteDB(quote: QuoteResponse) = viewModelScope.launch {
-        deleteQuote(quote)
-    }
-
-    fun getAllQuotes() = quoteRepository.getAllQuotes()
+    fun getAllLikedQuotes() = quoteRepository.getAllLikedQuotes()
 
     private suspend fun safeSingleQuote(){
         singleQuoteResponse.postValue(Resource.Loading())
@@ -56,6 +54,10 @@ class QuoteViewModel(
             quoteRepository.insertQuote(quote)
         }
 
+//    private fun getRandomQuoteDB() = viewModelScope.launch(Dispatchers.IO) {
+//            quoteRepository.getRandomQuoteDB()
+//
+//    }
     suspend fun deleteQuote(quote: QuoteResponse) {
         viewModelScope.launch(Dispatchers.IO) {
             quoteRepository.deleteQuote(quote)
@@ -76,8 +78,6 @@ class QuoteViewModel(
             .getSystemService(
                 Context.CONNECTIVITY_SERVICE
             ) as ConnectivityManager
-        // TODO: 2/5/2021 complete the network connectivity check function
-
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             val  activeNetwork = connectivityManager.activeNetwork ?: return  false
             val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
@@ -101,5 +101,7 @@ class QuoteViewModel(
             return false
         }
     }
+
+
 }
 

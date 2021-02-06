@@ -17,4 +17,8 @@ class QuoteRepository(
     suspend fun deleteQuote(quote: QuoteResponse) = db.getQuoteDao().deleteQuote(quote)
 
     fun getAllQuotes() = db.getQuoteDao().getAllQuotes()
+
+    fun getAllLikedQuotes() = db.getQuoteDao().getAllLikedQuotes()
+
+//    fun getRandomQuoteDB() = db.getQuoteDao().getRandomQuote()
 }

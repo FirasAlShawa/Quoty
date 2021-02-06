@@ -7,6 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="whiteT">#80FFFFFF</color>
     <color name="gradientBackground1">#474958</color>
     <color name="gradientBackground2">#2A2A36</color>
     <color name="gradientCard1">#747883</color>

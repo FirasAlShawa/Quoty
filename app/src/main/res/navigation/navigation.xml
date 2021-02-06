@@ -9,5 +9,20 @@
         android:id="@+id/home2"
         android:name="com.firasalshawa.quoty.UI.fragments.Home"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home2_to_likes"
+            app:destination="@id/likes" />
+    </fragment>
+    <fragment
+        android:id="@+id/likes"
+        android:name="com.firasalshawa.quoty.UI.fragments.Likes"
+        android:label="fragment_likes"
+        tools:layout="@layout/fragment_likes" >
+        <action
+            android:id="@+id/action_likes_to_home2"
+            app:destination="@id/home2"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/home2" />
+    </fragment>
 </navigation>
