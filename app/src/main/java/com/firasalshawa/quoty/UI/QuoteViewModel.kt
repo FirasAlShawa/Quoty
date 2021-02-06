@@ -56,12 +56,13 @@ class QuoteViewModel(
     fun updateFav(quote: QuoteResponse) =
         viewModelScope.launch(Dispatchers.IO) {
             quote.fav = !quote.fav
-            quoteRepository.insertQuote(quote)
+            quoteRepository.updateQuote(quote)
         }
 
     private fun getRandomQuoteDB() : QuoteResponse{
         return quoteRepository.getRandomQuoteDB()
     }
+
 
     suspend fun deleteQuote(quote: QuoteResponse) {
         viewModelScope.launch(Dispatchers.IO) {

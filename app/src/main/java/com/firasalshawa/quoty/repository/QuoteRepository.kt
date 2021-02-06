@@ -13,7 +13,9 @@ class QuoteRepository(
 
     suspend fun getQuote() = RetrofitInstance.api.getRandomQuote()
 
-    suspend fun insertQuote(quote:QuoteResponse) = db.getQuoteDao().upsert(quote)
+    suspend fun insertQuote(quote:QuoteResponse) = db.getQuoteDao().insertQuote(quote)
+
+    suspend fun updateQuote(quote: QuoteResponse) = db.getQuoteDao().updateQuote(quote)
 
     suspend fun deleteQuote(quote: QuoteResponse) = db.getQuoteDao().deleteQuote(quote)
 

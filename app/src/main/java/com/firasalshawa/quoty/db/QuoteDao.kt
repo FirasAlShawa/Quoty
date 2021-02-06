@@ -8,8 +8,11 @@ import com.firasalshawa.quoty.util.Resource
 @Dao
 interface QuoteDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(quote:QuoteResponse):Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertQuote(quote:QuoteResponse):Long
+
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun updateQuote(quote: QuoteResponse)
 
     @Query("SELECT * FROM Quotes")
     fun getAllQuotes():LiveData<List<QuoteResponse>>
