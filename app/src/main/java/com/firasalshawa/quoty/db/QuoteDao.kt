@@ -14,8 +14,8 @@ interface QuoteDao {
     @Query("SELECT * FROM Quotes")
     fun getAllQuotes():LiveData<List<QuoteResponse>>
 
-//    @Query("SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1")
-//    fun getRandomQuote()
+    @Query("SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1")
+    fun getRandomQuote():QuoteResponse
 
     @Query("SELECT * FROM Quotes WHERE fav=1")
     fun getAllLikedQuotes(): LiveData<List<QuoteResponse>>

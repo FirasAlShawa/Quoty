@@ -1,5 +1,6 @@
 package com.firasalshawa.quoty.repository
 
+import androidx.lifecycle.LiveData
 import androidx.room.Database
 import com.firasalshawa.quoty.api.RetrofitInstance
 import com.firasalshawa.quoty.db.QuoteDatabase
@@ -20,5 +21,5 @@ class QuoteRepository(
 
     fun getAllLikedQuotes() = db.getQuoteDao().getAllLikedQuotes()
 
-//    fun getRandomQuoteDB() = db.getQuoteDao().getRandomQuote()
+    fun getRandomQuoteDB() :QuoteResponse = db.getQuoteDao().getRandomQuote()
 }

@@ -56,11 +56,28 @@ class Home : Fragment(R.layout.fragment_home) {
                         snackBar.show()
                     }
                 }
+
+                is Resource.Loading -> {
+
+                }
             }
         })
 
+        viewModel.offlineQuote.observe(viewLifecycleOwner, Observer { quote ->
+            if(quote != null){
+                tvQuote.text = quote.quote
+                tvAuthorHome.text = quote.author
+            }
+        })
+
+
         btnLikeHome.setOnClickListener {
-            val currentQuote: QuoteResponse = viewModel.singleQuoteResponse.value?.data as QuoteResponse
+            val currentQuote: QuoteResponse
+            if(viewModel.isDeviceOnline()){
+                 currentQuote= viewModel.singleQuoteResponse.value?.data as QuoteResponse
+            }else{
+                 currentQuote= viewModel.offlineQuote.value as QuoteResponse
+            }
             viewModel.updateFav(currentQuote)
 
             if(currentQuote.fav == false )

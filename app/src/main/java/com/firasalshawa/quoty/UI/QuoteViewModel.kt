@@ -29,11 +29,13 @@ class QuoteViewModel(
     val singleQuoteResponse : MutableLiveData<Resource<QuoteResponse>>
         = MutableLiveData()
 
+    var offlineQuote : MutableLiveData<QuoteResponse> = MutableLiveData()
+
     val quotesLiveData : MutableLiveData<List<QuoteResponse>> = MutableLiveData()
 
     val likedQuotesLiveData : MutableLiveData<List<QuoteResponse>> = MutableLiveData()
 
-    fun getRandomQuote() = viewModelScope.launch {
+    fun getRandomQuote() = viewModelScope.launch(Dispatchers.IO) {
         safeSingleQuote()
     }
 
@@ -45,6 +47,9 @@ class QuoteViewModel(
             val response = quoteRepository.getQuote()
             singleQuoteResponse.postValue(handelSingleQuoteResponse(response))
             quoteRepository.insertQuote(response.body() as QuoteResponse)
+        }else{
+           val quote = getRandomQuoteDB()
+            offlineQuote.postValue(quote)
         }
     }
 
@@ -54,10 +59,10 @@ class QuoteViewModel(
             quoteRepository.insertQuote(quote)
         }
 
-//    private fun getRandomQuoteDB() = viewModelScope.launch(Dispatchers.IO) {
-//            quoteRepository.getRandomQuoteDB()
-//
-//    }
+    private fun getRandomQuoteDB() : QuoteResponse{
+        return quoteRepository.getRandomQuoteDB()
+    }
+
     suspend fun deleteQuote(quote: QuoteResponse) {
         viewModelScope.launch(Dispatchers.IO) {
             quoteRepository.deleteQuote(quote)
@@ -102,6 +107,7 @@ class QuoteViewModel(
         }
     }
 
+    fun isDeviceOnline():Boolean = hasInternetConnection()
 
 }
 
