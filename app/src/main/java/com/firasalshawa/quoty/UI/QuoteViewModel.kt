@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities.*
 import android.os.Build
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -12,7 +13,11 @@ import com.firasalshawa.quoty.QuoteApplication
 import com.firasalshawa.quoty.models.QuoteResponse
 import com.firasalshawa.quoty.repository.QuoteRepository
 import com.firasalshawa.quoty.util.Resource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
+import okhttp3.Dispatcher
+import okio.IOException
 import retrofit2.Response
 
 class QuoteViewModel(
@@ -24,15 +29,36 @@ class QuoteViewModel(
     val singleQuoteResponse : MutableLiveData<Resource<QuoteResponse>>
         = MutableLiveData()
 
+    val quotesLiveData : MutableLiveData<List<QuoteResponse>> = MutableLiveData()
+
     fun getRandomQuote() = viewModelScope.launch {
         safeSingleQuote()
     }
+
+    fun deleteQuoteDB(quote: QuoteResponse) = viewModelScope.launch {
+        deleteQuote(quote)
+    }
+
+    fun getAllQuotes() = quoteRepository.getAllQuotes()
 
     private suspend fun safeSingleQuote(){
         singleQuoteResponse.postValue(Resource.Loading())
         if(hasInternetConnection()){
             val response = quoteRepository.getQuote()
             singleQuoteResponse.postValue(handelSingleQuoteResponse(response))
+            quoteRepository.insertQuote(response.body() as QuoteResponse)
+        }
+    }
+
+    fun updateFav(quote: QuoteResponse) =
+        viewModelScope.launch(Dispatchers.IO) {
+            quote.fav = !quote.fav
+            quoteRepository.insertQuote(quote)
+        }
+
+    suspend fun deleteQuote(quote: QuoteResponse) {
+        viewModelScope.launch(Dispatchers.IO) {
+            quoteRepository.deleteQuote(quote)
         }
     }
 
