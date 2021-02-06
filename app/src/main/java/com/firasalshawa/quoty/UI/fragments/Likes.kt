@@ -12,6 +12,7 @@ import com.firasalshawa.quoty.QuoteActivity
 import com.firasalshawa.quoty.R
 import com.firasalshawa.quoty.UI.QuoteViewModel
 import com.firasalshawa.quoty.adapter.QuoteAdapter
+import com.firasalshawa.quoty.models.QuoteResponse
 import kotlinx.android.synthetic.main.fragment_likes.*
 
 class Likes : Fragment(R.layout.fragment_likes) {
@@ -37,6 +38,9 @@ class Likes : Fragment(R.layout.fragment_likes) {
            quoteAdapter.differ.submitList(list)
         })
 
+        quoteAdapter.setOnLikeClickListener { quote ->
+            viewModel.updateFav(quote)
+        }
     }
 
     private fun setupRecyclerView(){
@@ -46,6 +50,8 @@ class Likes : Fragment(R.layout.fragment_likes) {
             layoutManager = LinearLayoutManager(activity)
         }
     }
+
+
 
 
 }

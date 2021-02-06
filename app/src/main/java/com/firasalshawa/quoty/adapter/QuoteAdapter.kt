@@ -46,10 +46,23 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.QuoteViewHolder>(){
             }else{
                 btnLikeLayout.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_favorite_border_24))
             }
+
+            btnLikeLayout.setOnClickListener{
+                onLikeClickListener?.let {
+                    it(quote)
+                }
+            }
         }
     }
 
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
+
+    private var onLikeClickListener:((QuoteResponse)->Unit)? = null
+
+    fun setOnLikeClickListener(listener:(QuoteResponse) -> Unit){
+        onLikeClickListener = listener
+    }
+
 }
