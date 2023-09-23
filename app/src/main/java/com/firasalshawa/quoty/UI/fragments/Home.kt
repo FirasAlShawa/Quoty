@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.firasalshawa.quoty.QuoteActivity
 import com.firasalshawa.quoty.R
 import com.firasalshawa.quoty.UI.QuoteViewModel
@@ -30,11 +29,11 @@ class Home : Fragment(R.layout.fragment_home) {
     }
 
 
-    @SuppressLint("UseCompatLoadingForDrawables")
+    @SuppressLint("UseCompatLoadingForDrawables", "SuspiciousIndentation", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getRandomQuote()
+            viewModel.getRandomQuote()
 
         tvQuote.text = viewModel.singleQuoteResponse.value.toString()
 
@@ -44,6 +43,7 @@ class Home : Fragment(R.layout.fragment_home) {
                     res.data?.let { quoteResponse ->
                         tvQuote.text = quoteResponse.quote
                         tvAuthorHome.text = quoteResponse.author
+                        btnLikeHome.isEnabled = true
                     }
                 }
 
@@ -51,14 +51,18 @@ class Home : Fragment(R.layout.fragment_home) {
                     res.message?.let { message ->
                    val snackBar = Snackbar.make(
                             (activity as QuoteActivity).findViewById(android.R.id.content),
-                            "$message", Snackbar.LENGTH_LONG
+                       message, Snackbar.LENGTH_LONG
                         )
                         snackBar.show()
                     }
+                    tvQuote.text = "Try\nagain\nlater"
+                    btnLikeHome.isEnabled = false
                 }
 
                 is Resource.Loading -> {
-
+                    tvQuote.text = "..."
+                    tvAuthorHome.text = "..."
+                    btnLikeHome.isEnabled = false
                 }
             }
         })

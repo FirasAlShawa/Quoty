@@ -43,13 +43,17 @@ class QuoteViewModel(
 
     private suspend fun safeSingleQuote(){
         singleQuoteResponse.postValue(Resource.Loading())
-        if(hasInternetConnection()){
-            val response = quoteRepository.getQuote()
-            singleQuoteResponse.postValue(handelSingleQuoteResponse(response))
-            quoteRepository.insertQuote(response.body() as QuoteResponse)
-        }else{
-           val quote = getRandomQuoteDB()
-            offlineQuote.postValue(quote)
+        try{
+            if(hasInternetConnection()){
+                val response = quoteRepository.getQuote()
+                singleQuoteResponse.postValue(handelSingleQuoteResponse(response))
+                quoteRepository.insertQuote(response.body() as QuoteResponse)
+            }else{
+                val quote = getRandomQuoteDB()
+                offlineQuote.postValue(quote)
+            }
+        }catch (e:java.lang.Exception){
+            singleQuoteResponse.postValue(Resource.Error("Something wrong happened"))
         }
     }
 

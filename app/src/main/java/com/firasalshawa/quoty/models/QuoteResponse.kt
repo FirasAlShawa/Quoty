@@ -11,7 +11,7 @@ data class QuoteResponse(
     val author: String,
     @PrimaryKey
     val id: Int,
-    val permalink: String,
+    val permalink: String= " ",
     val quote: String,
     var fav:Boolean = false
 )
