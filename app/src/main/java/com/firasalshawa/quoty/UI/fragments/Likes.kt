@@ -5,14 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firasalshawa.quoty.QuoteActivity
 import com.firasalshawa.quoty.R
 import com.firasalshawa.quoty.UI.QuoteViewModel
 import com.firasalshawa.quoty.adapter.QuoteAdapter
-import com.firasalshawa.quoty.models.QuoteResponse
 import kotlinx.android.synthetic.main.fragment_likes.*
 
 class Likes : Fragment(R.layout.fragment_likes) {
@@ -34,9 +31,16 @@ class Likes : Fragment(R.layout.fragment_likes) {
 
         setupRecyclerView()
 
-        viewModel.getAllLikedQuotes().observe(viewLifecycleOwner, Observer { list ->
-           quoteAdapter.differ.submitList(list)
-        })
+        viewModel.getAllLikedQuotes().observe(viewLifecycleOwner) { list ->
+            if (list.isEmpty()) {
+                emptyStateLotti.visibility = View.VISIBLE
+                rvLikedQuotes.visibility = View.GONE
+            } else {
+                emptyStateLotti.visibility = View.GONE
+                rvLikedQuotes.visibility = View.VISIBLE
+                quoteAdapter.differ.submitList(list)
+            }
+        }
 
         quoteAdapter.setOnLikeClickListener { quote ->
             viewModel.updateFav(quote)
