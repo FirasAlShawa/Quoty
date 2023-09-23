@@ -6,7 +6,7 @@ import retrofit2.http.GET
 
 interface QuoteAPI {
 
-    @GET("random.json")
+    @GET("/")
     suspend fun getRandomQuote():Response<QuoteResponse>
 
 }
